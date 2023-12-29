@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://github.com/hamzaharoon1314/SnapEnhanceModGen/blob/9aba3263a34893c91a08d86183baf708bbbbea9c/REDME_IMG/LOGO.png" height="250" />
   
-![Action](https://github.com/hamzaharoon1314/SnapEnhanceModGen/actions/workflows/main.yml/badge.svg?branch=main)
+![Action](https://github.com/ABCPascal/SnapEnhanceModGen/actions/workflows/main.yml/badge.svg?branch=main)
   
 # SnapEnhance LSPatch Generator
 SnapEnhance is an Xposed mod that enhances your Snapchat experience.<br/><br/> This is Un-Offical repo to build the LSPatch Version.
@@ -12,8 +12,8 @@ SnapEnhance is an Xposed mod that enhances your Snapchat experience.<br/><br/> T
 This repository contains a GitHub Actions workflow for generating a Snapchat APK by using the [SnapEnhance Module](https://github.com/rhunk/SnapEnhance) and creating a public release.
 
 ## First Time Instructions -  How to Install module/snap
-1. Install the latest [snap-360-lspatched.apk](https://github.com/hamzaharoon1314/SnapEnhance-LSPatch-Generator/releases/latest)
-2. Install the latest [SnapEnhance apk](https://github.com/rhunk/SnapEnhance/releases/latest)
+1. Install the latest [snap-360-lspatched.apk](https://github.com/ABCPascal/SnapEnhanceModGen/releases/latest)
+2. Install the latest [SnapEnhance apk](https://t.me/snapenhance_ci)
    - (If you don't know what version (armv8 or armv7) to download, check out [this app](https://play.google.com/store/apps/details?id=com.abs.cpu_z_advance&hl=de&gl=US) and go into the CPU tab it will show you which version your phone supports)
 4. Done - ~have fun.
 ![MOD APK Image](REDME_IMG/modapk.png)   
@@ -23,18 +23,18 @@ This repository contains a GitHub Actions workflow for generating a Snapchat APK
 **Note: The following instructions apply only to non-rooted users.**
 
 ## SnapEnhance Update
-1. Download the new [SnapEnhance apk](https://github.com/rhunk/SnapEnhance/releases/latest) update.
+1. Download the new [SnapEnhance apk](https://t.me/snapenhance_ci) update.
 2. Install the new SnapEnhance update without repatching Snapchat.
-3. Clear Mapping File in SnapEnhanced.
+3. Clear Mapping File in SnapEnhance.
 
 ## Snapchat Update
 1. When a new Snapchat update is available:
-   - Install [snap-360-lspatched.apk](https://github.com/hamzaharoon1314/SnapEnhance-LSPatch-Generator/releases/latest) from the repository.
-3. Clear Mapping File in SnapEnhanced.
+   - Install [snap-360-lspatched.apk](https://github.com/ABCPascal/SnapEnhanceModGen/releases/latest) from the repository.
+3. Clear Mapping File in SnapEnhance.
 
-# What's the working of Action
+# How does the Github Action workflow work
 
-This GitHub Actions workflow automates the creation of a Snapchat Patch for Non-Root. Here's how it works:
+This GitHub Actions workflow automates the creation of a Snapchat Patch for Non-Root users. Here's how it works:
 
 1. **Snapchat Download**: The action downloads the latest stable version of Snapchat from APKMirror.
 
@@ -56,6 +56,10 @@ This GitHub Actions workflow automates the creation of a Snapchat Patch for Non-
 
 - You can customize the release tag and name by editing the `.github/workflows/main.yml` file.
 - Modify the `tag_name` and `release_name` values in the "Create Release" step.
+
+## How to report issues
+
+Do not report issues of these prebuilts in the official [SnapEnhance Telegram](https://t.me/snapenhance_chat) instead make a post about it on [r/SnapEnhanceApp](https://reddit.com/r/SnapEnhanceApp) with using the "Prebuilt Issue" post flair or make a post about on the [SnapEnhance Lemmy Community](https://lemmy.world/c/snapenhance) with mentioning that it's a prebuilt. If you have issues with the repo itself feel free to open issues.
 
 ## Contributing
 
