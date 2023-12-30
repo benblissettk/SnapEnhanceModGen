@@ -30,26 +30,26 @@ jobs:
           repo_owner="rhunk"
           repo_name="SnapEnhance"
           workflow_name="beta.yml"
-          pat="${{ secrets.SNAPENHANCEWORKFLOWARTIFACT }}"
+          pat="${{ secrets.SNAP_ENHANCE_WORKFLOW_ARTIFACT }}"
 
-          # Fetching the latest run for the specified workflow
-          run_url=$(curl -s -H "Authorization: Bearer $pat" \
+          artifact_url=$(curl -s -H "Authorization: Bearer $pat" \
             "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/workflows/${workflow_name}/runs?status=success&per_page=1" \
-            | jq -r '.workflow_runs[0].url')
+            | jq -r '.workflow_runs[0].artifacts_url')
 
-          # Fetching the artifact ID from the latest run
-          artifact_id=$(curl -s -H "Authorization: Bearer $pat" \
-            "$run_url/artifacts" \
-            | jq -r '.artifacts[0].id')
+          download_url=$(curl -s -H "Authorization: Bearer $pat" \
+            "$artifact_url" \
+            | jq -r '.artifacts[0].archive_download_url')
 
-          # Downloading the artifact using curl
-          curl -u ${{ secrets.GITHUB_TOKEN }} \
-            -L -o core.zip \
-            "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/artifacts/${artifact_id}/zip"
+          echo "Artifact URL: $artifact_url"
+          echo "Download URL: $download_url"
 
-          # Unzipping the artifact
-          unzip -q core.zip -d artifact
+          echo "download_url=$download_url" >> $GITHUB_ENV
         shell: bash
+
+      - name: Download Latest core.apk
+        run: |
+          download_url="${{ env.download_url }}"
+          wget "$download_url" -O "$GITHUB_WORKSPACE/core.apk"
 
       - name: Run the command
         run: |
