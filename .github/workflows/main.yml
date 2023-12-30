@@ -51,7 +51,7 @@ jobs:
 
       - name: Run APK Download Script
         run: |
-         ./script.sh  
+         ./betascript.sh  
 
       - name: Run the command
         run: |
