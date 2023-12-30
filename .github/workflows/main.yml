@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'push-here.md'
+      - '**/core.apk'
 
 jobs:
   build:
@@ -24,37 +25,37 @@ jobs:
         with:
           node-version: 16
 
-      - name: Get Latest Artifact URL
-        id: get_artifact
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
         run: |
-          repo_owner="rhunk"
-          repo_name="SnapEnhance"
-          workflow_name="beta.yml"
-          pat="${{ secrets.SNAP_ENHANCE_WORKFLOW_ARTIFACT }}"
-
-          artifact_url=$(curl -s -H "Authorization: Bearer $pat" \
-            "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/workflows/${workflow_name}/runs?status=success&per_page=1" \
-            | jq -r '.workflow_runs[0].artifacts_url')
-
-          download_url=$(curl -s -H "Authorization: Bearer $pat" \
-            "$artifact_url" \
-            | jq -r '.artifacts[0].archive_download_url')
-
-          echo "Artifact URL: $artifact_url"
-          echo "Download URL: $download_url"
-
-          echo "download_url=$download_url" >> $GITHUB_ENV
+          sudo apt-get update
+          sudo apt-get install -y jq curl
         shell: bash
 
-      - name: Download Latest core.apk
+      - name: Install unzip
+        run: sudo apt-get install unzip -y
+
+      - name: Install pup
         run: |
-          download_url="${{ env.download_url }}"
-          wget "$download_url" -O "$GITHUB_WORKSPACE/core.apk"
+         wget https://github.com/ericchiang/pup/releases/download/v0.4.0/pup_v0.4.0_linux_amd64.zip -O pup.zip
+         unzip pup.zip
+         chmod +x pup
+         sudo mv pup /usr/local/bin/
+        working-directory: . 
+
+      - name: Grant execute permissions to script
+        run: chmod +x script.sh
+        working-directory: .  
+
+      - name: Run APK Download Script
+        run: |
+         ./script.sh  
 
       - name: Run the command
         run: |
-          java -jar lspatch.jar -m artifact/core.apk -f -l 2 -v snap.apk
-        working-directory: $GITHUB_WORKSPACE
+          java -jar lspatch.jar -m "$GITHUB_WORKSPACE/core.apk" -f -l 2 -v snap.apk
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -78,4 +79,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: snap-360-lspatched.apk
-          tag_name: ${{ env.RELEASE_VERSION }}
+          tag_name: ${{ env.RELEASE_VERSION }}-Beta  # Append "-Beta" to the tag name
