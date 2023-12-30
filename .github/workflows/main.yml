@@ -42,11 +42,6 @@ jobs:
       - name: Run APK Download Script
         run: |
          ./script.sh  
-      
-      - name: Download core APK
-        run: |
-          wget "https://raw.githubusercontent.com/ABCPascal/SnapEnhanceModGen/main/core.apk" -O "$GITHUB_WORKSPACE/core.apk"
-        shell: bash
 
       - name: Run the command
         run: |
