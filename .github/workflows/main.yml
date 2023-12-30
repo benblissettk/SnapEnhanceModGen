@@ -31,30 +31,30 @@ jobs:
           repo_name="SnapEnhance"
           workflow_name="beta.yml"
           pat="${{ secrets.SNAPENHANCEWORKFLOWARTIFACT }}"
-    
-      # Fetching the latest run for the specified workflow
-      run_url=$(curl -s -H "Authorization: Bearer $pat" \
-        "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/workflows/${workflow_name}/runs?status=success&per_page=1" \
-        | jq -r '.workflow_runs[0].url')
 
-      # Fetching the artifact ID from the latest run
-      artifact_id=$(curl -s -H "Authorization: Bearer $pat" \
-      "$run_url/artifacts" \
-      | jq -r '.artifacts[0].id')
+          # Fetching the latest run for the specified workflow
+          run_url=$(curl -s -H "Authorization: Bearer $pat" \
+            "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/workflows/${workflow_name}/runs?status=success&per_page=1" \
+            | jq -r '.workflow_runs[0].url')
 
-      # Downloading the artifact using curl
-      curl -u ${{ secrets.GITHUB_TOKEN }} \
-      -L -o core.zip \
-      "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/artifacts/${artifact_id}/zip"
+          # Fetching the artifact ID from the latest run
+          artifact_id=$(curl -s -H "Authorization: Bearer $pat" \
+            "$run_url/artifacts" \
+            | jq -r '.artifacts[0].id')
 
-      # Unzipping the artifact
-      unzip -q core.zip -d artifact
-      shell: bash
+          # Downloading the artifact using curl
+          curl -u ${{ secrets.GITHUB_TOKEN }} \
+            -L -o core.zip \
+            "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/artifacts/${artifact_id}/zip"
+
+          # Unzipping the artifact
+          unzip -q core.zip -d artifact
+        shell: bash
 
       - name: Run the command
         run: |
           java -jar lspatch.jar -m artifact/core.apk -f -l 2 -v snap.apk
-          working-directory: $GITHUB_WORKSPACE
+        working-directory: $GITHUB_WORKSPACE
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
