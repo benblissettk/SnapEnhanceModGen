@@ -60,8 +60,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: snap-360-lspatched.apk
-          path: ./snap-360-lspatched.apk
+          name: snap-402-lspatched.apk
+          path: ./snap-402-lspatched.apk
 
       - name: Check if the release already exists
         id: check_release
@@ -78,5 +78,5 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: snap-360-lspatched.apk
+          files: snap-402-lspatched.apk
           tag_name: ${{ env.RELEASE_VERSION }}-Beta  # Append "-Beta" to the tag name
