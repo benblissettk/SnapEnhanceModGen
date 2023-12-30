@@ -10,38 +10,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Set JAVA_HOME
+        run: echo "JAVA_HOME=$(echo ${{ steps.setup-java.outputs.java-home }})" >> $GITHUB_ENV
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 16
 
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Install dependencies
+      - name: Get Latest Artifact URL
+        id: get_artifact
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq curl
+          repo_owner="rhunk"
+          repo_name="SnapEnhance"
+          workflow_name="beta.yml"
+          
+          artifact_url=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${repo_owner}/${repo_name}/actions/workflows/${workflow_name}/runs?event=push&status=success&per_page=1" \
+            | jq -r '.workflow_runs[0].artifacts_url')
+
+          download_url=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "$artifact_url" \
+            | jq -r '.artifacts[] | select(.name == "core.apk") | .archive_download_url')
+
+          echo "download_url=$download_url" >> $GITHUB_ENV
         shell: bash
 
-      - name: Install unzip
-        run: sudo apt-get install unzip -y
-
-      - name: Install pup
+      - name: Download Latest core.apk
         run: |
-         wget https://github.com/ericchiang/pup/releases/download/v0.4.0/pup_v0.4.0_linux_amd64.zip -O pup.zip
-         unzip pup.zip
-         chmod +x pup
-         sudo mv pup /usr/local/bin/
-        working-directory: . 
-
-      - name: Grant execute permissions to script
-        run: chmod +x script.sh
-        working-directory: .  
-
-      - name: Run APK Download Script
-        run: |
-         ./script.sh  
+          download_url="${{ env.download_url }}"
+          wget "$download_url" -O "$GITHUB_WORKSPACE/core.apk"
 
       - name: Run the command
         run: |
