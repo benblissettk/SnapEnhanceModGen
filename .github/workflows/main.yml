@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: 16
 
-     - name: Get Latest Artifact URL
+      - name: Get Latest Artifact URL
         id: get_artifact
         run: |
           repo_owner="rhunk"
