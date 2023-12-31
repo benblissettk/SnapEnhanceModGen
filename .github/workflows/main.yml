@@ -5,6 +5,7 @@ on:
     paths:
       - 'push-here.md'
       - '**/core.apk'
+      - '**/lspatch.jar'
 
 jobs:
   build:
