@@ -50,6 +50,15 @@ for version in "${versions[@]}"; do
     wget -U "$UserAgent" -O snap.apk "https://www.apkmirror.com$url3"
     if [ $? -eq 0 ]; then
         echo "APK downloaded successfully as snap.apk"
+        
+        # Give execute permissions to the convert script
+        chmod +x convert_apks_to_apk.sh
+
+        # Check if it's an .apks file and run the conversion script
+        if [[ "$url3" == *".apks"* ]]; then
+            ./convert_apks_to_apk.sh snap.apk
+        fi
+
         exit 0
     else
         echo "Failed to download APK" >&2
