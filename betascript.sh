@@ -20,7 +20,7 @@ for version in "${versions[@]}"; do
     if [[ "$canonicalUrl" == *"apk-download"* ]]; then
         url1=("${canonicalUrl/"https://www.apkmirror.com/"//}")
     else
-        grep -q 'class="error404"' <<<"$page1" && echo noversion >&2 && exit 1
+        grep -q 'class="error404"' <<<"$page1" && continue
 
         page2=$(pup -p --charset utf-8 ':parent-of(:parent-of(span:contains("APK")))' <<<"$page1")
 
@@ -29,18 +29,18 @@ for version in "${versions[@]}"; do
 
         readarray -t url1 < <(pup -p --charset utf-8 ":parent-of(div:contains(\"$arch\")) a.accent_color attr{href}" <<<"$page2")
 
-        [ "${#url1[@]}" -eq 0 ] && echo noapk >&2 && exit 1
+        [ "${#url1[@]}" -eq 0 ] && continue
     fi
     echo 33
 
     url2=$(curl -sL -A "$UserAgent" "https://www.apkmirror.com${url1[-1]}" | pup -p --charset utf-8 'a:contains("Download APK") attr{href}')
 
-    [ "$url2" == "" ] && echo error >&2 && exit 1
+    [ "$url2" == "" ] && continue
     echo 66
 
     url3=$(curl -sL -A "$UserAgent" "https://www.apkmirror.com$url2" | pup -p --charset UTF-8 'a[data-google-vignette="false"][rel="nofollow"] attr{href}')
 
-    [ "$url3" == "" ] && echo error >&2 && exit 1
+    [ "$url3" == "" ] && continue
     echo 100
 
     echo "https://www.apkmirror.com$url3" >&2
