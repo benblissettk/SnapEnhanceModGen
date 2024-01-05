@@ -5,6 +5,7 @@ on:
     - cron: '45 11,23 * * *'
   push:
     paths:
+      - 'push-here.md'
       - '**/core.apk'
 
 jobs:
