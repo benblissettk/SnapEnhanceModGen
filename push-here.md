@@ -1,3 +1,4 @@
-# A File to do dirty stuff - push in this file to trigger action Snap 12.68.0.23 Beta & SnapEnhance CI Build ffd42de
+# A File to do dirty stuff - push in this file to trigger action
+# Stable Information: Newest Snap Stable version & SnapEnhance Stable v1.2.6
 
 Add a dot here:.
