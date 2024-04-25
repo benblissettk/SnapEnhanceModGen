@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Set up Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           distribution: 'adopt'
           java-version: '17'
@@ -23,12 +23,12 @@ jobs:
         run: echo "JAVA_HOME=$(echo ${{ steps.setup-java.outputs.java-home }})" >> $GITHUB_ENV
   
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
 
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -93,10 +93,12 @@ jobs:
           java -jar lspatch.jar -m latest-snapenhance-${release_tag_name}.apk -f -l 2 -v snap.apk
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: snap-402-lspatched.apk
           path: ./snap-402-lspatched.apk
+          overwrite: true
+          
       - name: Check if the release already exists
         id: check_release
         run: |
@@ -109,7 +111,7 @@ jobs:
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
       - name: Create or Update Release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: snap-402-lspatched.apk
           tag_name: ${{ env.RELEASE_VERSION }}-Stable  # Append "-Stable" to the tag name
