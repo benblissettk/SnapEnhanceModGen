@@ -1,8 +1,6 @@
 name: SnapEnhanceModGen Schedule
 
-# on:
-#  schedule:
-#    - cron: '45 11,23 * * *'
+on:
   push:
     paths:
       - 'push-here.md'
