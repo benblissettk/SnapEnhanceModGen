@@ -32,25 +32,27 @@ for version in "${versions[@]}"; do
 
             [ "${#url1[@]}" -eq 0 ] && continue
         fi
-        echo 33
+        echo "1/3 url1: $url1"
 
         url2=$(curl -sL -A "$UserAgent" "https://www.apkmirror.com${url1[-1]}" | pup -p --charset utf-8 'a:contains("Download APK") attr{href}')
 
         [ "$url2" == "" ] && continue
-        echo 66
+        echo "2/3 url2: $url2"
 
-        url3=$(curl -sL -A "$UserAgent" "https://www.apkmirror.com$url2" | pup -p --charset UTF-8 'a[data-google-vignette="false"][rel="nofollow"] attr{href}')
+        url3=$(curl -sL -A "$UserAgent" "https://www.apkmirror.com$url2" | pup -p --charset UTF-8 'a[rel="nofollow"][data-google-interstitial="false"] attr{href}')
 
         [ "$url3" == "" ] && continue
-        echo 100
+        echo "3/3 url3: $url3"
 
         echo "https://www.apkmirror.com$url3" >&2
         echo "Downloading APK from: https://www.apkmirror.com$url3"
 
+        # Make Directory for APK file
+        mkdir snapchatapk
         # Download the APK file and save it as snap.apk
-        wget -U "$UserAgent" -O snap.apk "https://www.apkmirror.com$url3"
+        wget -U "$UserAgent" -O snapchatapk/$version.apk "https://www.apkmirror.com$url3"
         if [ $? -eq 0 ]; then
-            echo "APK downloaded successfully as snap.apk"
+            echo "APK downloaded successfully as $version.apk"
             exit 0
         else
             echo "Failed to download APK" >&2
