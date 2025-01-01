@@ -7,6 +7,7 @@ page1=$(curl --fail-early --connect-timeout 2 --max-time 5 -sL -A "$UserAgent" "
 readarray -t versions < <(pup -p 'div.widget_appmanager_recentpostswidget h5 a.fontBlack text{}' <<<"$page1")
 
 for version in "${versions[@]}"; do
+    if [ 0 -eq 0 ]; then
     # Extract version number and replace spaces and dots with hyphens
     version=$(echo "$version" | tr ' ' '-' | tr '.' '-' | tr '[:upper:]' '[:lower:]')
     echo "$version"
